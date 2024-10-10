@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chess V1.1</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="scripts/jquery/jquery-1.8.3.js"></script>
+        <script src="scripts/jquery/jquery-ui.js"></script>
+        <script src="scripts/jquery/jquery.ui.touch-punch.min.js"></script>
+        <script src="scripts/chess.js"></script>
+        <style>
+            .grid {
+                width: 512px;
+                height: 512px;
+                border-collapse:separate;
+                border-spacing:0;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .grid td {
+                margin: 1px;
+                padding: 0;
+                width: 64px;
+                height: 64px;
+              /*border: solid 1px white;*/
+            }
+            .grid tbody tr td { background-color: #eeeed2; }
+            .grid tbody tr:nth-child(odd) td:nth-child(even),
+            .grid tbody tr:nth-child(even) td:nth-child(odd) { background-color: #769655; }
+            .piece {
+                background-image: url('img/(0)chess.png');
+                background-size: 380px;
+                width: 64px;
+                height: 64px;
+            }
+
+            .White.pawn{
+                background-position  : -318px -0px;
+            }
+
+            .White.bishop{
+                background-position  : -129px -0px;
+            }
+
+            .White.knight{
+                background-position  : -193px -0px;
+            }
+
+            .White.rook{
+                background-position  : -257px -0px;
+            }
+
+            .White.queen{
+                background-position  : -65px -0px;
+            }
+
+            .White.king{
+                background-position  : -0px -0px;
+            }
+
+            .Black.pawn{
+                background-position  : -320px -64px;
+            }
+
+            .Black.bishop{
+                background-position  : -129px -64px;
+            }
+
+            .Black.knight{
+                background-position  : -193px -64px;
+            }
+
+            .Black.rook{
+                background-position  : -257px -64px;
+            }
+
+            .Black.queen{
+                background-position  : -65px -64px;
+            }
+
+            .Black.king{
+                background-position  : -0px -64px;
+            }
+        </style>
+    </head>
+    <body bgcolor = 'lavender'>
+        <h1 style = "font-family: Verdana"><center>Chess V1.1</center></h1>
+        <hr size = 3 noshade>
+        <br>
+        <center><p id='alertMessage' style = "font-family: Verdana"></p></center>
+        <table class="grid">
+            <tbody>
+                <tr>
+                    <td class="piece Black rook"></td>
+                    <td class="piece Black knight"></td>
+                    <td class="piece Black bishop"></td>
+                    <td class="piece Black queen"></td>
+                    <td class="piece Black king"></td>
+                    <td class="piece Black bishop"></td>
+                    <td class="piece Black knight"></td>
+                    <td class="piece Black rook"></td>
+                </tr>
+                <tr>
+                    <td class="piece Black pawn"></td>
+                    <td class="piece Black pawn"></td>
+                    <td class="piece Black pawn"></td>
+                    <td class="piece Black pawn"></td>
+                    <td class="piece Black pawn"></td>
+                    <td class="piece Black pawn"></td>
+                    <td class="piece Black pawn"></td>
+                    <td class="piece Black pawn"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="piece White pawn"></td>
+                        <td class="piece White pawn"></td>
+                        <td class="piece White pawn"></td>
+                        <td class="piece White pawn"></td>
+                        <td class="piece White pawn"></td>
+                        <td class="piece White pawn"></td>
+                        <td class="piece White pawn"></td>
+                        <td class="piece White pawn"></td>
+                    </tr>
+                    <tr>
+                        <td class="piece White rook"></td>
+                        <td class="piece White knight"></td>
+                        <td class="piece White bishop"></td>
+                        <td class="piece White queen"></td>
+                        <td class="piece White king"></td>
+                        <td class="piece White bishop"></td>
+                        <td class="piece White knight"></td>
+                        <td class="piece White rook"></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <center>
+        <button onclick = 'reload();' id='button'>new game</button>
+        </center>
+        <p><center style = "font-family: Verdana">Edited by @jakefeasel and @andrewfeasel (Github).</center></p>
+        <p><center style = "font-family: Verdana">&#169;Jake Feasel</center></p>
+    </body>
+</html>
