@@ -15,9 +15,9 @@ $(function () {
     };
     var getPieceAtPosition = function (column, row, gridObj) {
         var obj = {},
-            retObj = {hasMoved: false}
+            retObj = {hasMoved: false},
             i=0,classes;
-        }
+
         if (typeof(gridObj) === "undefined") {
             obj = getSquare(column, row, gridObj);
 
@@ -405,20 +405,22 @@ $(function () {
 
             $(".grid .piece." + currentPlayer).draggable( "disable" );
             currentPlayer = (currentPlayer === "White") ? "Black" : "White";
+
             if (!getAllValidMovesForSide(currentPlayer).length) {
                 if (isKingInCheck(currentPlayer, grid2Obj())) {
-                    message = 'Checkmate! '+ currentPlayer +" Loses!";
-                    alertMessage.innerHTML = `${message}`;} 
-                else {message = 'Stalemate!';
-                      alertMessage.innerHTML = `${message}`;}
-           else {if(isKingInCheck(currentPlayer, grid2Obj())){
-                        message = 'Check! '+ currentPlayer + "'s Move"; 
-                        alertMessage.innerHTML = `${message}`;}
-            else{
-                message = currentPlayer + "'s Move"; 
-                alertMessage.innerHTML = `${message}`;}}
-        
-            $(".grid .piece." + currentPlayer).draggable( "enable" );
+                    alertMessage.innerHTML = `Checkmate! ${currentPlayer} Loses!`;
+                } else {
+                  alertMessage.innerHTML = 'Stalemate!';
+                }
+           } else {
+             if (isKingInCheck(currentPlayer, grid2Obj())) {
+              alertMessage.innerHTML = `Check! ${currentPlayer}'s Move`;
+            } else {
+              alertMessage.innerHTML = `${currentPlayer}'s Move`;
+            }
+          }
+
+          $(".grid .piece." + currentPlayer).draggable( "enable" );
 
         },
         over: function () {
