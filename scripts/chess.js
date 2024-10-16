@@ -45,6 +45,37 @@ $(function () {
         }
         return retObj;
     };
+    var calculateAnnotation = function (newPosition, oldPosition) {
+        var grid = grid2Obj();
+        var pieceBeingMoved = getPieceAtPosition(oldPosition.column, oldPosition.row, grid);
+        var pieceAtNewPosition = getPieceAtPosition(newPosition.column, newPosition.row, grid);
+        var annotation = {};
+
+        switch (pieceBeingMoved.type) {
+            case "pawn":
+                annotation.prefix = "P";
+                break;
+            case "knight":
+                annotation.prefix = "N";
+                break;
+            case "king":
+                annotation.prefix = "K";
+                break;
+            case "bishop":
+                annotation.prefix = "B";
+                break;
+            case "rook":
+                annotation.prefix = "R";
+                break;
+            case "queen":
+                annotation.prefix = "Q";
+                break;
+        }
+        annotation.column = String.fromCharCode(("a".codePointAt() + (newPosition.column-1)));
+        annotation.row = (9-newPosition.row);
+        annotation.captured = typeof pieceAtNewPosition.side !== "undefined";
+        return annotation;
+    };
     var grid2Obj = function () {
         var i=1,j=1,
             gridObj = [];
@@ -324,6 +355,10 @@ $(function () {
         return validMoves;
     };
 
+    var showMoveAnnotation = function (annotation) {
+        console.log(annotation);
+    };
+
     $(".grid td").draggable({
         helper: function () {
             var helper = $("<i>").insertAfter(".grid");
@@ -356,13 +391,14 @@ $(function () {
 
     $(".grid td").droppable({
         drop: function (event, ui) {
+            var newPosition = getGridPosition(this),
+                oldPosition = getGridPosition(ui.draggable[0]);
+
+            var annotation = calculateAnnotation(newPosition, oldPosition);
 
             $(".grid td").removeClass("potentialEnPassant");
 
             if ($(this).attr("special")) {
-                var newPosition = getGridPosition(this),
-                    oldPosition = getGridPosition(ui.draggable[0]);
-
                 switch ($(this).attr("special")) {
                     case "castle":
                         var currentRookSquare,newRookSquare;
@@ -421,7 +457,7 @@ $(function () {
           }
 
           $(".grid .piece." + currentPlayer).draggable( "enable" );
-
+          showMoveAnnotation(annotation);
         },
         over: function () {
             $(this).css("border-color", "red");
