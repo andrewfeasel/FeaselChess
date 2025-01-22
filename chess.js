@@ -2,6 +2,8 @@ $(function () {
     var message = "White's Move";
     var alertMessage = document.getElementById("alertMessage");
     alertMessage.innerHTML =`${message}`;
+    var textnotation = document.getElementById('textnotation');
+    var turnCount = 0;
     var currentPlayer = "White";
 
     var getGridPosition = function (obj) {
@@ -356,7 +358,9 @@ $(function () {
     };
 
     function showMoveAnnotation(annotation) {
-        log('console',annotation);
+	    turnCount++;
+        console.log(annotation);
+        textnotation.innerHTML += `${turnCount}: ${JSON.stringify(annotation)} <br>`;
     };
 
     $(".grid td").draggable({
