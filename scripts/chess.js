@@ -3,6 +3,7 @@ $(function () {
     var alertMessage = document.getElementById("alertMessage");
     alertMessage.innerHTML =`${message}`;
     var textnotation = document.getElementById('textnotation');
+    var notationString = '';
     var turnCount = 0;
     var currentPlayer = "White";
 
@@ -52,10 +53,17 @@ $(function () {
         var pieceBeingMoved = getPieceAtPosition(oldPosition.column, oldPosition.row, grid);
         var pieceAtNewPosition = getPieceAtPosition(newPosition.column, newPosition.row, grid);
         var annotation = {};
-
+        annotation.column = String.fromCharCode(("a".codePointAt() + (newPosition.column-1)));
+        annotation.row = (9-newPosition.row);
+        annotation.captured = typeof pieceAtNewPosition.side !== "undefined";
         switch (pieceBeingMoved.type) {
             case "pawn":
-                annotation.prefix = "";
+                if(!!annotation.captured){
+                    annotation.prefix = String.fromCharCode(("a".codePointAt() + (oldPosition.column-1)));
+                }
+                else {
+                    annotation.prefix = '';
+                }
                 break;
             case "knight":
                 annotation.prefix = "N";
@@ -73,9 +81,6 @@ $(function () {
                 annotation.prefix = "Q";
                 break;
         }
-        annotation.column = String.fromCharCode(("a".codePointAt() + (newPosition.column-1)));
-        annotation.row = (9-newPosition.row);
-        annotation.captured = typeof pieceAtNewPosition.side !== "undefined";
         return annotation;
     };
     var grid2Obj = function () {
@@ -358,9 +363,16 @@ $(function () {
     };
 
     function showMoveAnnotation({prefix,column,row,captured}) {
+        var captureSymbol = 'x';
 	    turnCount++;
         console.log(arguments);
-        textnotation.innerHTML += `${turnCount}. ${prefix}${column}${row} `;
+        if(!!captured){
+            notationString += `${turnCount}. ${prefix}${captureSymbol}${column}${row} `;
+        }
+        else{
+            notationString += `${turnCount}. ${prefix}${column}${row} `;
+        }
+        textnotation.innerHTML = notationString;
         textnotation.scrollTop = textnotation.scrollHeight;
     };
 
