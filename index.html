@@ -8,9 +8,13 @@
         <script src="scripts/jquery/jquery.ui.touch-punch.min.js"></script>
         <script src="scripts/chess.js"></script>
         <style>
+            body {
+                background-color: antiquewhite;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
             #textnotation {
                 font-family: 'Times New Roman', Times, serif;
-                background-color: aliceblue;
+                background-color: white;
                 border: solid 1px black;
                 overflow: scroll;
                 width:512px;
@@ -91,13 +95,13 @@
             }
         </style>
     </head>
-    <body bgcolor = 'lavender'>
-        <h1 style = "font-family: Verdana"><center>FeaselChess</center></h1>
+    <body>
+        <h1><center>FeaselChess</center></h1>
         <hr size = 3 noshade>
         <br>
         <center>
-	        <p id='alertMessage' style = "font-family: Verdana"></p>
-            <div id = 'textnotation'></div>
+	        <p id='alertMessage'></p>
+            <pre id = 'textnotation'></pre>
 	    </center>
         <table class="grid">
             <tbody>
@@ -147,47 +151,47 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="piece White pawn"></td>
-                        <td class="piece White pawn"></td>
-                        <td class="piece White pawn"></td>
-                        <td class="piece White pawn"></td>
-                        <td class="piece White pawn"></td>
-                        <td class="piece White pawn"></td>
-                        <td class="piece White pawn"></td>
-                        <td class="piece White pawn"></td>
-                    </tr>
-                    <tr>
-                        <td class="piece White rook"></td>
-                        <td class="piece White knight"></td>
-                        <td class="piece White bishop"></td>
-                        <td class="piece White queen"></td>
-                        <td class="piece White king"></td>
-                        <td class="piece White bishop"></td>
-                        <td class="piece White knight"></td>
-                        <td class="piece White rook"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td class="piece White pawn"></td>
+                  <td class="piece White pawn"></td>
+                  <td class="piece White pawn"></td>
+                  <td class="piece White pawn"></td>
+                  <td class="piece White pawn"></td>
+                  <td class="piece White pawn"></td>
+                  <td class="piece White pawn"></td>
+                  <td class="piece White pawn"></td>
+                </tr>
+                <tr>
+                  <td class="piece White rook"></td>
+                  <td class="piece White knight"></td>
+                  <td class="piece White bishop"></td>
+                  <td class="piece White queen"></td>
+                  <td class="piece White king"></td>
+                  <td class="piece White bishop"></td>
+                  <td class="piece White knight"></td>
+                  <td class="piece White rook"></td>
                 </tr>
             </tbody>
         </table>
         <br>
         <center>
-            <button onclick = 'reload();' id='button'>new game</button>
+          <button onclick = 'reload();' id='button'>new game</button>
+          <p>Edited by @jakefeasel and @andrewfeasel (Github).</p>
+          <p>&#169;Jake Feasel</p>
         </center>
-        <p><center style = "font-family: Verdana">Edited by @jakefeasel and @andrewfeasel (Github).</center></p>
-        <p><center style = "font-family: Verdana">&#169;Jake Feasel</center></p>
     </body>
 </html>
