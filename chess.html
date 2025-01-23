@@ -8,6 +8,15 @@
         <script src="scripts/jquery/jquery.ui.touch-punch.min.js"></script>
         <script src="scripts/chess.js"></script>
         <style>
+            #textnotation {
+                font-family: 'Times New Roman', Times, serif;
+                background-color: aliceblue;
+                border: solid 1px black;
+                overflow: scroll;
+                width:512px;
+                height: 32px;
+                text-align: left;
+            }
             .grid {
                 width: 512px;
                 height: 512px;
@@ -88,6 +97,7 @@
         <br>
         <center>
 	        <p id='alertMessage' style = "font-family: Verdana"></p>
+            <div id = 'textnotation'></div>
 	    </center>
         <table class="grid">
             <tbody>
@@ -175,7 +185,6 @@
         </table>
         <br>
         <center>
-            <div id = 'textnotation' style = 'width:512px;'></div>
             <button onclick = 'reload();' id='button'>new game</button>
         </center>
         <p><center style = "font-family: Verdana">Edited by @jakefeasel and @andrewfeasel (Github).</center></p>

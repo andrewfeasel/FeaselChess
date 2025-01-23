@@ -360,7 +360,8 @@ $(function () {
     function showMoveAnnotation({prefix,column,row,captured}) {
 	    turnCount++;
         console.log(arguments);
-        textnotation.innerHTML += `${turnCount}:${prefix}${column}${row}<br>`;
+        textnotation.innerHTML += `${turnCount}. ${prefix}${column}${row} `;
+        textnotation.scrollTop = textnotation.scrollHeight;
     };
 
     $(".grid td").draggable({
