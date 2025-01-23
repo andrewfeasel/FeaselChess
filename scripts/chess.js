@@ -55,7 +55,7 @@ $(function () {
 
         switch (pieceBeingMoved.type) {
             case "pawn":
-                annotation.prefix = "P";
+                annotation.prefix = "";
                 break;
             case "knight":
                 annotation.prefix = "N";
@@ -357,10 +357,10 @@ $(function () {
         return validMoves;
     };
 
-    function showMoveAnnotation(annotation) {
+    function showMoveAnnotation({prefix,column,row,captured}) {
 	    turnCount++;
-        console.log(annotation);
-        textnotation.innerHTML += `${turnCount}: ${JSON.stringify(annotation)} <br>`;
+        console.log(arguments);
+        textnotation.innerHTML += `${turnCount}:${prefix}${column}${row}<br>`;
     };
 
     $(".grid td").draggable({
