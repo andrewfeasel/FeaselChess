@@ -363,14 +363,15 @@ $(function () {
     };
 
     function showMoveAnnotation({prefix,column,row,captured}) {
-        var captureSymbol = 'x';
+        var isCheck = '';
+        if (isKingInCheck(currentPlayer, grid2Obj())) { isCheck = `+`; }
+        else { isCheck = ''; }
 	    turnCount++;
-        console.log(arguments);
-        if(!!captured){
-            notationString += `${turnCount}. ${prefix}${captureSymbol}${column}${row} `;
+        if(!!captured) {
+            notationString += `${turnCount}. ${prefix}x${column}${row}${isCheck} `;
         }
-        else{
-            notationString += `${turnCount}. ${prefix}${column}${row} `;
+        else {
+            notationString += `${turnCount}. ${prefix}${column}${row}${isCheck} `;
         }
         textnotation.innerHTML = notationString;
         textnotation.scrollTop = textnotation.scrollHeight;
