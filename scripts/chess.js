@@ -363,12 +363,15 @@ $(function () {
     };
 
     function showMoveAnnotation({prefix,column,row,captured}) {
-        var isCheck = '';
-        if (isKingInCheck(currentPlayer, grid2Obj())) {
-            isCheck = `+`;
-        }
-        else {
+        var isCheck;
+        if (!getAllValidMovesForSide(currentPlayer).length) {
+            isCheck = '#';
+        } else {
+          if (isKingInCheck(currentPlayer, grid2Obj())) {
+            isCheck = '+';
+          } else {
             isCheck = '';
+          }
         }
         if (currentPlayer === 'Black') {
             // the notation is done after each move,
