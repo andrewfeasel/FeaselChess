@@ -364,14 +364,30 @@ $(function () {
 
     function showMoveAnnotation({prefix,column,row,captured}) {
         var isCheck = '';
-        if (isKingInCheck(currentPlayer, grid2Obj())) { isCheck = `+`; }
-        else { isCheck = ''; }
-	    turnCount++;
-        if(!!captured) {
-            notationString += `${turnCount}. ${prefix}x${column}${row}${isCheck} `;
+        if (isKingInCheck(currentPlayer, grid2Obj())) {
+            isCheck = `+`;
         }
         else {
-            notationString += `${turnCount}. ${prefix}${column}${row}${isCheck} `;
+            isCheck = '';
+        }
+        if (currentPlayer === 'Black') {
+            // the notation is done after each move,
+            // making white's notation being done on black's move
+            turnCount++;
+            if(!!captured) {
+                notationString += `${turnCount}. ${prefix}x${column}${row}${isCheck} `;
+            }
+            else {
+                notationString += `${turnCount}. ${prefix}${column}${row}${isCheck} `;
+            }
+        }
+        else {
+            if(!!captured) {
+                notationString += `${prefix}x${column}${row}${isCheck} `;
+            }
+            else {
+                notationString += `${prefix}${column}${row}${isCheck} `;
+            }
         }
         textnotation.innerHTML = notationString;
         textnotation.scrollTop = textnotation.scrollHeight;
