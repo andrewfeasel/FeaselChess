@@ -6,7 +6,6 @@ $(function () {
     var notationString = '';
     var turnCount = 0;
     var currentPlayer = "White";
-
     var getGridPosition = function (obj) {
         var column = $(obj).parent().children().index(obj),
             row = $(obj).parent().parent().children().index(obj.parentNode);
@@ -362,35 +361,54 @@ $(function () {
         return validMoves;
     };
 
-    function showMoveAnnotation({prefix,column,row,captured}) {
-        var isCheck;
+    function showMoveAnnotation({prefix,column,row,captured,castled}) {
+        var isCheck = '';
         if (!getAllValidMovesForSide(currentPlayer).length) {
             isCheck = '#';
-        } else {
-          if (isKingInCheck(currentPlayer, grid2Obj())) {
+        }
+        else if (isKingInCheck(currentPlayer, grid2Obj())) {
             isCheck = '+';
-          } else {
-            isCheck = '';
-          }
         }
-        if (currentPlayer === 'Black') {
-            // the notation is done after each move,
-            // making white's notation being done on black's move
-            turnCount++;
-            if(!!captured) {
-                notationString += `${turnCount}. ${prefix}x${column}${row}${isCheck} `;
-            }
-            else {
-                notationString += `${turnCount}. ${prefix}${column}${row}${isCheck} `;
-            }
-        }
-        else {
-            if(!!captured) {
-                notationString += `${prefix}x${column}${row}${isCheck} `;
-            }
-            else {
-                notationString += `${prefix}${column}${row}${isCheck} `;
-            }
+        switch (castled) {
+            case 'O-O-O':
+                if (currentPlayer === 'Black') {
+                    turnCount++;
+                    notationString += `${turnCount}. ${castled}${isCheck} `; 
+                }
+                else {
+                    notationString += `${castled}${isCheck} `;
+                }
+                break;
+            case 'O-O':
+                if (currentPlayer === 'Black') {
+                    turnCount++;
+                    notationString += `${turnCount}. ${castled}${isCheck} `; 
+                }
+                else {
+                    notationString += `${castled}${isCheck}<br>`;
+                }
+                break;
+            default:
+                if (currentPlayer === 'Black') {
+                    turnCount++;
+                    if(!!captured) {
+                        notationString += `${turnCount}. ${prefix}x`;
+                    }
+                    else {
+                        notationString += `${turnCount}. ${prefix}`;
+                    }
+                    notationString += `${column}${row}${isCheck} `;
+                }
+                else {
+                    if(!!captured) {
+                        notationString += `${prefix}x`;
+                    }
+                    else {
+                        notationString += `${prefix}`;
+                    }
+                    notationString += `${column}${row}${isCheck}<br>`;
+                }
+                break;
         }
         textnotation.innerHTML = notationString;
         textnotation.scrollTop = textnotation.scrollHeight;
@@ -442,9 +460,13 @@ $(function () {
                         if (oldPosition.column - newPosition.column === 2) {
                             currentRookSquare = getSquare(1,oldPosition.row);
                             newRookSquare = getSquare(oldPosition.column-1,oldPosition.row);
+                            annotation.castled = 'O-O-O';
+                            // O-O
                         } else {
                             currentRookSquare = getSquare(8,oldPosition.row);
                             newRookSquare = getSquare(oldPosition.column+1,oldPosition.row);
+                            annotation.castled = 'O-O';
+                            // O-O-O
                         }
                         newRookSquare.attr("class", currentRookSquare.attr("class"));
                         currentRookSquare.attr("class", "");
