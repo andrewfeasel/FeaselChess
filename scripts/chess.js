@@ -52,7 +52,7 @@ $(function () {
         var pieceBeingMoved = getPieceAtPosition(oldPosition.column, oldPosition.row, grid);
         var pieceAtNewPosition = getPieceAtPosition(newPosition.column, newPosition.row, grid);
         var annotation = {};
-        annotation.column = String.fromCharCode(("a".codePointAt() + (newPosition.column-1)));
+        annotation.column = newPosition.column;
         annotation.row = (9-newPosition.row);
         annotation.captured = typeof pieceAtNewPosition.side !== "undefined";
         switch (pieceBeingMoved.type) {
@@ -363,6 +363,7 @@ $(function () {
 
     function showMoveAnnotation({prefix,column,row,captured,castled}) {
         var isCheck = '';
+        column = String.fromCharCode(("a".codePointAt() + (column-1)));
         if (!getAllValidMovesForSide(currentPlayer).length) {
             isCheck = '#';
         }
@@ -479,6 +480,9 @@ $(function () {
                     case "enPassant":
                         var capturedPawn = getSquare(newPosition.column, oldPosition.row);
                         capturedPawn.attr("class", "");
+                        annotation.prefix = String.fromCharCode(("a".codePointAt() + (oldPosition.column-1)));
+                        annotation.row--;
+                        annotation.captured = true;
                     break;
                     case "promotion":
                         ui.draggable.css("background-position", "");
