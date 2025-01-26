@@ -490,15 +490,19 @@ $(function () {
                         switch (promotionPrompt) {
                             case 'rook':
                                 ui.draggable.addClass('rook');
+                                notationString += 'R';
                                 break;
                             case 'bishop':
                                 ui.draggable.addClass('bishop');
+                                notationString += 'B';
                                 break;
                             case 'knight':
                                 ui.draggable.addClass('knight');
+                                notationString += 'K';
                                 break;
                             default:
                                 ui.draggable.addClass('queen');
+                                notationString += 'Q';
                         };
                     break;
                 }
