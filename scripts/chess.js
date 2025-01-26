@@ -487,7 +487,20 @@ $(function () {
                     case "promotion":
                         ui.draggable.css("background-position", "");
                         ui.draggable.removeClass("pawn");
-                        ui.draggable.addClass("queen");
+                        var promotionPrompt = prompt('Choose a piece. Your options are: queen (default), rook, bishop, or knight').toLowerCase();
+                        switch (promotionPrompt) {
+                            case 'rook':
+                                ui.draggable.addClass('rook');
+                                break;
+                            case 'bishop':
+                                ui.draggable.addClass('bishop');
+                                break;
+                            case 'knight':
+                                ui.draggable.addClass('knight');
+                                break;
+                            default:
+                                ui.draggable.addClass('queen');
+                        };
                     break;
                 }
             }
