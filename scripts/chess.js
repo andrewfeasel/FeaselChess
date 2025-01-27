@@ -414,19 +414,23 @@ $(function () {
         textnotation.innerHTML = notationString;
         textnotation.scrollTop = textnotation.scrollHeight;
     };
-    const flip = (el) => {
+    const boardFlip = () => {
+        const board = document.getElementsByTagName('table')[0];
+        let pieceArr = Array.from(board.getElementsByTagName('td'));
         if (!flipped) {
-            el.style.rotate = '180deg';
+            board.style.rotate = '180deg';
+            pieceArr.forEach(piece => {
+                piece.style.rotate = '180deg';
+            })
             flipped = true;
         }
         else {
-            el.style.rotate = '0deg';
+            board.style.rotate = '0deg';
+            pieceArr.forEach(piece => {
+                piece.style.rotate = '0deg';
+            })
             flipped = false;
         }
-    }
-    const boardFlip = () => {
-        const board = document.getElementsByTagName('table')[0];
-        flip(board);
     }
     $(".grid td").draggable({
         helper: function () {
