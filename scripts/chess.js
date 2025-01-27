@@ -1,22 +1,21 @@
 $(function () {
-    var message = "White's Move";
-    var alertMessage = document.getElementById("alertMessage");
+    let message = "White's Move";
+    let alertMessage = document.getElementById("alertMessage");
     alertMessage.innerHTML =`${message}`;
-    var textnotation = document.getElementById('textnotation');
-    var notationString = '';
-    var turnCount = 0;
-    var currentPlayer = "White";
-    var getGridPosition = function (obj) {
-        var column = $(obj).parent().children().index(obj),
+    let textnotation = document.getElementById('textnotation');
+    let notationString = '';
+    let turnCount = 0;
+    let currentPlayer = "White";
+    const getGridPosition = (obj) => {
+        const column = $(obj).parent().children().index(obj),
             row = $(obj).parent().parent().children().index(obj.parentNode);
         return { column: column+1, row: row+1 };
     };
-    var getSquare = function (column, row) {
-        var obj = $(".grid tr:nth-child("+(row)+") td:nth-child("+(column)+")");
-        return obj;
+    const getSquare = (column, row) => {
+        return $(".grid tr:nth-child("+(row)+") td:nth-child("+(column)+")");
     };
-    var getPieceAtPosition = function (column, row, gridObj) {
-        var obj = {},
+    const getPieceAtPosition = (column, row, gridObj) => {
+        let obj = {},
             retObj = {hasMoved: false},
             i=0,classes;
 
@@ -48,10 +47,10 @@ $(function () {
         return retObj;
     };
     var calculateAnnotation = function (newPosition, oldPosition) {
-        var grid = grid2Obj();
-        var pieceBeingMoved = getPieceAtPosition(oldPosition.column, oldPosition.row, grid);
-        var pieceAtNewPosition = getPieceAtPosition(newPosition.column, newPosition.row, grid);
-        var annotation = {};
+        let grid = grid2Obj();
+        let pieceBeingMoved = getPieceAtPosition(oldPosition.column, oldPosition.row, grid);
+        let pieceAtNewPosition = getPieceAtPosition(newPosition.column, newPosition.row, grid);
+        let annotation = {};
         annotation.column = newPosition.column;
         annotation.row = (9-newPosition.row);
         annotation.captured = typeof pieceAtNewPosition.side !== "undefined";
@@ -82,8 +81,8 @@ $(function () {
         }
         return annotation;
     };
-    var grid2Obj = function () {
-        var i=1,j=1,
+    const grid2Obj = () => {
+        let i=1,j=1,
             gridObj = [];
         for (i=1;i<=8;i++) {
             gridObj.push([]);
@@ -94,8 +93,8 @@ $(function () {
         return gridObj;
     };
 
-    var isKingInCheck = function(side,gridObj) {
-        var validMoves = [],
+    const isKingInCheck = (side,gridObj) => {
+        let validMoves = [],
             i,j,k,kingPos={};
 
         // first, find the king we're interested in...
@@ -132,7 +131,7 @@ $(function () {
         return false;
     };
 
-    var getValidMovesForPiece = function (gridObj, piece, position,ignoreCheck) {
+    const getValidMovesForPiece = (gridObj, piece, position,ignoreCheck) => {
         var moves = [],validMoves = [],
             i,tempGridObj,
             direction,checkPosition;
@@ -184,7 +183,7 @@ $(function () {
                     i,j,k;
                 for (i=0;i<twos.length;i++) {
                     for (j=0;j<ones.length;j++) {
-                        var pairs = [[twos[i],ones[j]], [ones[i],twos[j]]];
+                        let pairs = [[twos[i],ones[j]], [ones[i],twos[j]]];
                         for (k=0;k<pairs.length;k++) {
                             if (position.row+pairs[k][0] >= 1 &&
                                 position.row+pairs[k][0] <= 8 &&
@@ -348,8 +347,8 @@ $(function () {
         return validMoves;
     };
 
-    var getAllValidMovesForSide = function (side) {
-        var validMoves = [],
+    const getAllValidMovesForSide = (side) => {
+        let validMoves = [],
             i,j,gridObj = grid2Obj();
         for (i=0;i<8;i++) {
             for (j=0;j<8;j++) {
@@ -361,8 +360,8 @@ $(function () {
         return validMoves;
     };
 
-    function showMoveAnnotation({prefix,column,row,captured,castled}) {
-        var isCheck = '';
+    const showMoveAnnotation = ({prefix,column,row,captured,castled}) => {
+        let isCheck = '';
         column = String.fromCharCode(("a".codePointAt() + (column-1)));
         if (!getAllValidMovesForSide(currentPlayer).length) {
             isCheck = '#';
@@ -417,14 +416,14 @@ $(function () {
 
     $(".grid td").draggable({
         helper: function () {
-            var helper = $("<i>").insertAfter(".grid");
+            let helper = $("<i>").insertAfter(".grid");
             helper.attr("class", $(this).attr("class"));
             return helper;
         },
         revert: true,
         containment: ".grid",
         start: function () {
-            var pos = getGridPosition(this),
+            let pos = getGridPosition(this),
                 piece = getPieceAtPosition(pos.column,pos.row),
                 validMoves = getValidMovesForPiece(grid2Obj(), piece, pos),
                 i;
@@ -447,17 +446,17 @@ $(function () {
 
     $(".grid td").droppable({
         drop: function (event, ui) {
-            var newPosition = getGridPosition(this),
+            let newPosition = getGridPosition(this),
                 oldPosition = getGridPosition(ui.draggable[0]);
 
-            var annotation = calculateAnnotation(newPosition, oldPosition);
+            let annotation = calculateAnnotation(newPosition, oldPosition);
 
             $(".grid td").removeClass("potentialEnPassant");
 
             if ($(this).attr("special")) {
                 switch ($(this).attr("special")) {
                     case "castle":
-                        var currentRookSquare,newRookSquare;
+                        let currentRookSquare,newRookSquare;
                         if (oldPosition.column - newPosition.column === 2) {
                             currentRookSquare = getSquare(1,oldPosition.row);
                             newRookSquare = getSquare(oldPosition.column-1,oldPosition.row);
@@ -474,11 +473,11 @@ $(function () {
 
                     break;
                     case "twoSquareFirst":
-                        var newRow = newPosition.row + ((oldPosition.row - newPosition.row)/2);
+                        let newRow = newPosition.row + ((oldPosition.row - newPosition.row)/2);
                         getSquare(newPosition.column, newRow).addClass("potentialEnPassant");
                     break;
                     case "enPassant":
-                        var capturedPawn = getSquare(newPosition.column, oldPosition.row);
+                        let capturedPawn = getSquare(newPosition.column, oldPosition.row);
                         capturedPawn.attr("class", "");
                         annotation.prefix = String.fromCharCode(("a".codePointAt() + (oldPosition.column-1)));
                         annotation.row--;
@@ -487,7 +486,7 @@ $(function () {
                     case "promotion":
                         ui.draggable.css("background-position", "");
                         ui.draggable.removeClass("pawn");
-                        var promotionPrompt = prompt('Choose a piece. Your options are: queen (default), rook, bishop, or knight').toLowerCase();
+                        let promotionPrompt = prompt('Choose a piece. Your options are: queen (default), rook, bishop, or knight').toLowerCase();
                         switch (promotionPrompt) {
                             case 'rook':
                                 ui.draggable.addClass('rook');
