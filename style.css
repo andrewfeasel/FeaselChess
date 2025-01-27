@@ -2,6 +2,9 @@ body {
     background-color: antiquewhite;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+.flipped {
+    rotate: 180deg;
+}
 #textnotation {
     background-color: white;
     overflow: scroll;

@@ -1,4 +1,5 @@
 $(function () {
+    let flipped = false;
     let message = "White's Move";
     let alertMessage = document.getElementById("alertMessage");
     alertMessage.innerHTML =`${message}`;
@@ -46,7 +47,7 @@ $(function () {
         }
         return retObj;
     };
-    var calculateAnnotation = function (newPosition, oldPosition) {
+    const calculateAnnotation = (newPosition, oldPosition) => {
         let grid = grid2Obj();
         let pieceBeingMoved = getPieceAtPosition(oldPosition.column, oldPosition.row, grid);
         let pieceAtNewPosition = getPieceAtPosition(newPosition.column, newPosition.row, grid);
@@ -413,7 +414,20 @@ $(function () {
         textnotation.innerHTML = notationString;
         textnotation.scrollTop = textnotation.scrollHeight;
     };
-
+    const flip = (el) => {
+        if (!flipped) {
+            el.style.rotate = '180deg';
+            flipped = true;
+        }
+        else {
+            el.style.rotate = '0deg';
+            flipped = false;
+        }
+    }
+    const boardFlip = () => {
+        const board = document.getElementsByTagName('table')[0];
+        flip(board);
+    }
     $(".grid td").draggable({
         helper: function () {
             let helper = $("<i>").insertAfter(".grid");
@@ -443,14 +457,13 @@ $(function () {
     });
 
     $(".grid .piece." + currentPlayer).draggable( "enable" );
-
     $(".grid td").droppable({
         drop: function (event, ui) {
+            boardFlip();
             let newPosition = getGridPosition(this),
                 oldPosition = getGridPosition(ui.draggable[0]);
 
             let annotation = calculateAnnotation(newPosition, oldPosition);
-
             $(".grid td").removeClass("potentialEnPassant");
 
             if ($(this).attr("special")) {
@@ -461,12 +474,10 @@ $(function () {
                             currentRookSquare = getSquare(1,oldPosition.row);
                             newRookSquare = getSquare(oldPosition.column-1,oldPosition.row);
                             annotation.castled = 'O-O-O';
-                            // O-O
                         } else {
                             currentRookSquare = getSquare(8,oldPosition.row);
                             newRookSquare = getSquare(oldPosition.column+1,oldPosition.row);
                             annotation.castled = 'O-O';
-                            // O-O-O
                         }
                         newRookSquare.attr("class", currentRookSquare.attr("class"));
                         currentRookSquare.attr("class", "");
