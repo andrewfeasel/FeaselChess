@@ -386,7 +386,7 @@ $(function () {
                     notationString += `${turnCount}. ${castled}${isCheck} `; 
                 }
                 else {
-                    notationString += `${castled}${isCheck}<br>`;
+                    notationString += `${castled}${isCheck} <br>`;
                 }
                 break;
             default:
@@ -407,7 +407,7 @@ $(function () {
                     else {
                         notationString += `${prefix}`;
                     }
-                    notationString += `${column}${row}${isCheck}<br>`;
+                    notationString += `${column}${row}${isCheck} <br>`;
                 }
                 break;
         }
@@ -434,10 +434,21 @@ $(function () {
             }
         }
     }
-    const toggleFlips = () => {
+    let flipsButton = document.getElementById('toggleFlips')
+    flipsButton.addEventListener('click', () => {
         canFlip = !canFlip;
-    }
-    document.getElementById('toggleFlips').addEventListener('change',toggleFlips);
+        if(canFlip){
+            flipsButton.textContent = 'Board Flips: Enabled';
+        }
+        else{
+            flipsButton.textContent = 'Board Flips: Disabled';
+        }
+    });
+    document.getElementById('copyButton').addEventListener('click', () => {
+        navigator.clipboard.writeText(document.getElementById('textnotation').textContent);
+        alert("Copied the text: " + copyText.value);
+    });
+    
     $(".grid td").draggable({
         helper: function () {
             let helper = $("<i>").insertAfter(".grid");

@@ -2,8 +2,9 @@ body {
     background-color: antiquewhite;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-.flipped {
-    rotate: 180deg;
+#copyButton {
+    float: left;
+    position: absolute;
 }
 #textnotation {
     border: solid 2px black;
