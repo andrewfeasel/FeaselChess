@@ -1,5 +1,5 @@
 $(function () {
-    let flipped = false;
+    let canFlip = false, flipped = false;
     let message = "White's Move";
     let alertMessage = document.getElementById("alertMessage");
     alertMessage.innerHTML =`${message}`;
@@ -415,23 +415,29 @@ $(function () {
         textnotation.scrollTop = textnotation.scrollHeight;
     };
     const boardFlip = () => {
-        const board = document.getElementsByTagName('table')[0];
-        let pieceArr = Array.from(board.getElementsByTagName('td'));
-        if (!flipped) {
-            board.style.rotate = '180deg';
-            pieceArr.forEach(piece => {
-                piece.style.rotate = '180deg';
-            })
-            flipped = true;
-        }
-        else {
-            board.style.rotate = '0deg';
-            pieceArr.forEach(piece => {
-                piece.style.rotate = '0deg';
-            })
-            flipped = false;
+        if (canFlip) {
+            const board = document.getElementsByTagName('table')[0];
+            let pieceArr = Array.from(board.getElementsByTagName('td'));
+            if (!flipped) {
+                board.style.rotate = '180deg';
+                pieceArr.forEach(piece => {
+                    piece.style.rotate = '180deg';
+                })
+                flipped = true;
+            }
+            else {
+                board.style.rotate = '0deg';
+                pieceArr.forEach(piece => {
+                    piece.style.rotate = '0deg';
+                })
+                flipped = false;
+            }
         }
     }
+    const toggleFlips = () => {
+        canFlip = !canFlip;
+    }
+    document.getElementById('toggleFlips').addEventListener('change',toggleFlips);
     $(".grid td").draggable({
         helper: function () {
             let helper = $("<i>").insertAfter(".grid");
