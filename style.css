@@ -6,6 +6,7 @@ body {
     rotate: 180deg;
 }
 #textnotation {
+    border: solid 2px black;
     background-color: white;
     overflow: scroll;
     width: 256px;
@@ -15,6 +16,7 @@ body {
     text-align: left;
 }
 .grid {
+    border: solid 2px black;
     width: 512px;
     height: 512px;
     border-collapse:separate;

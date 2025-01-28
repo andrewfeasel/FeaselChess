@@ -568,6 +568,3 @@ $(function () {
         disabled: true
     });
 });
-function reload(){
-    location.reload();
-}
