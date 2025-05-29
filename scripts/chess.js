@@ -1,12 +1,37 @@
 $(function () {
-    let canFlip = false, flipped = false;
-    let message = "White's Move";
+    const Board = {
+        canFlip: false,
+        flipped: false,
+        turnCount: 0,
+        flip() {
+            if (this.canFlip) {
+                const board = document.getElementsByTagName('table')[0];
+                let pieceArr = Array.from(board.getElementsByTagName('td'));
+                if (!this.flipped) {
+                    board.style.rotate = '180deg';
+                    pieceArr.forEach(piece => {
+                        piece.style.rotate = '180deg';
+                    })
+                    this.flipped = true;
+                }
+                else {
+                    board.style.rotate = '0deg';
+                    pieceArr.forEach(piece => {
+                    piece.style.rotate = '0deg';
+                })
+                this.flipped = false;
+            }
+        },
+        getPlayer(){
+            this.turnCount % 2 === 0
+            ? "White"
+            : "Black"
+        }
+    };
     let alertMessage = document.getElementById("alertMessage");
-    alertMessage.innerHTML =`${message}`;
+    alertMessage.innerHTML =`White's Move`;
     let textnotation = document.getElementById('textnotation');
     let notationString = '';
-    let turnCount = 0;
-    let currentPlayer = "White";
     const getGridPosition = (obj) => {
         const column = $(obj).parent().children().index(obj),
             row = $(obj).parent().parent().children().index(obj.parentNode);
@@ -414,29 +439,9 @@ $(function () {
         textnotation.innerHTML = notationString;
         textnotation.scrollTop = textnotation.scrollHeight;
     };
-    const boardFlip = () => {
-        if (canFlip) {
-            const board = document.getElementsByTagName('table')[0];
-            let pieceArr = Array.from(board.getElementsByTagName('td'));
-            if (!flipped) {
-                board.style.rotate = '180deg';
-                pieceArr.forEach(piece => {
-                    piece.style.rotate = '180deg';
-                })
-                flipped = true;
-            }
-            else {
-                board.style.rotate = '0deg';
-                pieceArr.forEach(piece => {
-                    piece.style.rotate = '0deg';
-                })
-                flipped = false;
-            }
-        }
-    }
     let flipsButton = document.getElementById('toggleFlips')
     flipsButton.addEventListener('click', () => {
-        canFlip = !canFlip;
+        Board.canFlip = !Board.canFlip;
         if(canFlip){
             flipsButton.textContent = 'Board Flips: Enabled';
         }
@@ -560,6 +565,7 @@ $(function () {
                   alertMessage.innerHTML = 'Stalemate!';
                 }
            } else {
+             const currentPlayer = Board.getPlayer();
              if (isKingInCheck(currentPlayer, grid2Obj())) {
               alertMessage.innerHTML = `Check! ${currentPlayer}'s Move`;
             } else {
@@ -567,7 +573,7 @@ $(function () {
             }
           }
 
-          $(".grid .piece." + currentPlayer).draggable( "enable" );
+          $(".grid .piece." + Board.getPlayer()).draggable( "enable" );
           showMoveAnnotation(annotation);
         },
         over: function () {
