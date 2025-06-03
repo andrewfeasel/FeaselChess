@@ -21,7 +21,7 @@ $(function () {
                 })
                 this.flipped = false;
             }
-        },
+        }
         getPlayer(){
             this.turnCount % 2 === 0
             ? "White"
