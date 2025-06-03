@@ -13,13 +13,13 @@ $(function () {
                         piece.style.rotate = '180deg';
                     })
                     this.flipped = true;
-                }
-                else {
+                } else {
                     board.style.rotate = '0deg';
                     pieceArr.forEach(piece => {
-                    piece.style.rotate = '0deg';
-                })
-                this.flipped = false;
+                        piece.style.rotate = '0deg';
+                    })
+                    this.flipped = false;
+                }
             }
         }
         getPlayer(){
