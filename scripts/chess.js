@@ -9,15 +9,11 @@ $(function () {
                 let pieceArr = Array.from(board.getElementsByTagName('td'));
                 if (!this.flipped) {
                     board.style.rotate = '180deg';
-                    pieceArr.forEach(piece => {
-                        piece.style.rotate = '180deg';
-                    })
+                    pieceArr.forEach(piece => piece.style.rotate = '180deg');
                     this.flipped = true;
                 } else {
                     board.style.rotate = '0deg';
-                    pieceArr.forEach(piece => {
-                        piece.style.rotate = '0deg';
-                    })
+                    pieceArr.forEach(piece => piece.style.rotate = '0deg');
                     this.flipped = false;
                 }
             }
