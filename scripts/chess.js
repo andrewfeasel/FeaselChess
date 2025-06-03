@@ -10,7 +10,7 @@ $(function () {
                 if (!this.flipped) {
                     board.style.rotate = '180deg';
                     pieceArr.forEach(piece => piece.style.rotate = '180deg');
-                    this.flipped = true;
+                    this. = true;
                 } else {
                     board.style.rotate = '0deg';
                     pieceArr.forEach(piece => piece.style.rotate = '0deg');
@@ -436,10 +436,10 @@ $(function () {
         textnotation.innerHTML = notationString;
         textnotation.scrollTop = textnotation.scrollHeight;
     };
-    let flipsButton = document.getElementById('toggleFlips')
+    let flipsButton = document.getElementById('toggleFlips');
     flipsButton.addEventListener('click', () => {
         Board.canFlip = !Board.canFlip;
-        if(canFlip){
+        if(Board.canFlip){
             flipsButton.textContent = 'Board Flips: Enabled';
         }
         else{
