@@ -387,6 +387,7 @@ $(function () {
     };
 
     const showMoveAnnotation = ({prefix,column,row,captured,castled}) => {
+        const currentPlayer = Board.getPlayer();
         let isCheck = '';
         column = String.fromCharCode(("a".codePointAt() + (column-1)));
         if (!getAllValidMovesForSide(currentPlayer).length) {
@@ -482,10 +483,10 @@ $(function () {
         disabled: true
     });
 
-    $(".grid .piece." + currentPlayer).draggable( "enable" );
+    $(".grid .piece." + Board.getPlayer()).draggable( "enable" );
     $(".grid td").droppable({
         drop: function (event, ui) {
-            boardFlip();
+            Board.flip();
             let newPosition = getGridPosition(this),
                 oldPosition = getGridPosition(ui.draggable[0]);
 
@@ -524,7 +525,7 @@ $(function () {
                         ui.draggable.css("background-position", "");
                         ui.draggable.removeClass("pawn");
                         let promotionPrompt = prompt('Choose a piece. Your options are: queen (default), rook, bishop, or knight').toLowerCase();
-                        switch (promotionPrompt) {
+                        switch (promotionPrompt.toLowerCase()) {
                             case 'rook':
                                 ui.draggable.addClass('rook');
                                 notationString += 'R';
@@ -554,22 +555,20 @@ $(function () {
 
             ui.draggable.attr("class", "");
             ui.draggable.draggable("option", "revert", false);
+            
+            $(".grid .piece." + Board.getPlayer()).draggable( "disable" );
 
-            $(".grid .piece." + currentPlayer).draggable( "disable" );
-            currentPlayer = (currentPlayer === "White") ? "Black" : "White";
-
-            if (!getAllValidMovesForSide(currentPlayer).length) {
-                if (isKingInCheck(currentPlayer, grid2Obj())) {
-                    alertMessage.innerHTML = `Checkmate! ${currentPlayer} Loses!`;
+            if (!getAllValidMovesForSide(Board.getPlayer()).length) {
+                if (isKingInCheck(Board.getPlayer(), grid2Obj())) {
+                    alertMessage.innerHTML = `Checkmate! ${Board.getPlayer()} Loses!`;
                 } else {
                   alertMessage.innerHTML = 'Stalemate!';
                 }
            } else {
-             const currentPlayer = Board.getPlayer();
-             if (isKingInCheck(currentPlayer, grid2Obj())) {
-              alertMessage.innerHTML = `Check! ${currentPlayer}'s Move`;
+             if (isKingInCheck(Board.getPlayer(), grid2Obj())) {
+              alertMessage.innerHTML = `Check! ${Board.getPlayer()}'s Move`;
             } else {
-              alertMessage.innerHTML = `${currentPlayer}'s Move`;
+              alertMessage.innerHTML = `${Board.getPlayer()}'s Move`;
             }
           }
 
