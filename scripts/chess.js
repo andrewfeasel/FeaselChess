@@ -395,8 +395,7 @@ $(function () {
         switch (castled) {
             case 'O-O-O':
                 if (currentPlayer === 'Black') {
-                    turnCount++;
-                    notationString += `${turnCount}. ${castled}${isCheck} `; 
+                    notationString += `${Board.turnCount}. ${castled}${isCheck} `; 
                 }
                 else {
                     notationString += `${castled}${isCheck} `;
@@ -404,8 +403,7 @@ $(function () {
                 break;
             case 'O-O':
                 if (currentPlayer === 'Black') {
-                    turnCount++;
-                    notationString += `${turnCount}. ${castled}${isCheck} `; 
+                    notationString += `${Board.turnCount}. ${castled}${isCheck} `; 
                 }
                 else {
                     notationString += `${castled}${isCheck} <br>`;
@@ -413,12 +411,11 @@ $(function () {
                 break;
             default:
                 if (currentPlayer === 'Black') {
-                    turnCount++;
                     if(!!captured) {
-                        notationString += `${turnCount}. ${prefix}x`;
+                        notationString += `${Board.turnCount}. ${prefix}x`;
                     }
                     else {
-                        notationString += `${turnCount}. ${prefix}`;
+                        notationString += `${Board.turnCount}. ${prefix}`;
                     }
                     notationString += `${column}${row}${isCheck} `;
                 }
@@ -437,7 +434,7 @@ $(function () {
         $('#textnotation').scrollTop = $('#textnotation').scrollHeight;
     }
     $('#toggleFlips').click(function(){
-        Board.canFlip = !Board.canFlip;
+        Board. = !Board.canFlip;
         if(Board.canFlip){
             $(this).html('Board Flips: Enabled');
         } else {
@@ -457,13 +454,12 @@ $(function () {
         revert: true,
         containment: ".grid",
         start: function () {
-            let pos = getGridPosition(this),
-                piece = getPieceAtPosition(pos.column,pos.row),
-                validMoves = getValidMovesForPiece(grid2Obj(), piece, pos),
-                i;
+            let pos = getGridPosition(this);
+            let piece = getPieceAtPosition(pos.column,pos.row),
+            let validMoves = getValidMovesForPiece(grid2Obj(), piece, pos),
             $(this).draggable("option", "revert", true);
             $(this).css("border-color", "yellow");
-            for (i in validMoves) {
+            for (let i in validMoves) {
                 getSquare(validMoves[i].column, validMoves[i].row)
                     .droppable( "enable" )
                     .attr("special", validMoves[i].special);
@@ -480,8 +476,8 @@ $(function () {
     $(".grid td").droppable({
         drop: function (event, ui) {
             Board.flip();
-            let newPosition = getGridPosition(this),
-                oldPosition = getGridPosition(ui.draggable[0]);
+            let newPosition = getGridPosition(this);
+            let oldPosition = getGridPosition(ui.draggable[0]);
 
             let annotation = calculateAnnotation(newPosition, oldPosition);
             $(".grid td").removeClass("potentialEnPassant");
@@ -553,15 +549,15 @@ $(function () {
 
             if (!getAllValidMovesForSide(Board.getPlayer()).length) {
                 if (isKingInCheck(Board.getPlayer(), grid2Obj())) {
-                    alertMessage.innerHTML = `Checkmate! ${Board.getPlayer()} Loses!`;
+                    $('#alertMessage').html(`Checkmate! ${Board.getPlayer()} Loses!`);
                 } else {
-                  alertMessage.innerHTML = 'Stalemate!';
+                  $('#alertMessage').html('Stalemate!');
                 }
            } else {
              if (isKingInCheck(Board.getPlayer(), grid2Obj())) {
-              alertMessage.innerHTML = `Check! ${Board.getPlayer()}'s Move`;
+              $('#alertMessage').html(`Check! ${Board.getPlayer()}'s Move`);
             } else {
-              alertMessage.innerHTML = `${Board.getPlayer()}'s Move`;
+              $('#alertMessage').html(`${Board.getPlayer()}'s Move`);
             }
           }
 
