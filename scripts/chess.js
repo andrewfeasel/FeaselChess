@@ -5,12 +5,12 @@ $(function () {
         turnCount: 0,
         flip() {
             if (this.canFlip) {
-                const board = document.getElementsByTagName('table')[0];
-                let pieceArr = Array.from(board.getElementsByTagName('td'));
+                const board = $("table")[0];
+                let pieceArr = Array.from($('table td'));
                 if (!this.flipped) {
                     board.style.rotate = '180deg';
                     pieceArr.forEach(piece => piece.style.rotate = '180deg');
-                    this. = true;
+                    this.flipped = true;
                 } else {
                     board.style.rotate = '0deg';
                     pieceArr.forEach(piece => piece.style.rotate = '0deg');
@@ -19,24 +19,23 @@ $(function () {
             }
         },
         getPlayer(){
-            this.turnCount % 2 === 0
-            ? "White"
-            : "Black"
+            if(this.turnCount % 2 === 0){
+                return "White";
+            } else {
+                return "Black"
+            }
         }
     };
-    let alertMessage = document.getElementById("alertMessage");
-    alertMessage.innerHTML =`White's Move`;
-    let textnotation = document.getElementById('textnotation');
-    let notationString = '';
-    const getGridPosition = (obj) => {
-        const column = $(obj).parent().children().index(obj),
-            row = $(obj).parent().parent().children().index(obj.parentNode);
+    $("#alertMessage").html("White's Move");
+    function getGridPosition(obj) {
+        const column = $(obj).parent().children().index(obj);
+        const row = $(obj).parent().parent().children().index(obj.parentNode);
         return { column: column+1, row: row+1 };
     };
-    const getSquare = (column, row) => {
+    function getSquare(column, row) {
         return $(".grid tr:nth-child("+(row)+") td:nth-child("+(column)+")");
     };
-    const getPieceAtPosition = (column, row, gridObj) => {
+    function getPieceAtPosition(column, row, gridObj) {
         let obj = {},
             retObj = {hasMoved: false},
             i=0,classes;
@@ -67,8 +66,8 @@ $(function () {
             retObj = gridObj[row-1][column-1];
         }
         return retObj;
-    };
-    const calculateAnnotation = (newPosition, oldPosition) => {
+    }
+    function calculateAnnotation(newPosition, oldPosition) {
         let grid = grid2Obj();
         let pieceBeingMoved = getPieceAtPosition(oldPosition.column, oldPosition.row, grid);
         let pieceAtNewPosition = getPieceAtPosition(newPosition.column, newPosition.row, grid);
@@ -102,7 +101,7 @@ $(function () {
                 break;
         }
         return annotation;
-    };
+    }
     const grid2Obj = () => {
         let i=1,j=1,
             gridObj = [];
@@ -153,7 +152,7 @@ $(function () {
         return false;
     };
 
-    const getValidMovesForPiece = (gridObj, piece, position,ignoreCheck) => {
+    function getValidMovesForPiece(gridObj, piece, position,ignoreCheck) {
         var moves = [],validMoves = [],
             i,tempGridObj,
             direction,checkPosition;
@@ -367,9 +366,9 @@ $(function () {
             validMoves = moves;
         }
         return validMoves;
-    };
+    }
 
-    const getAllValidMovesForSide = (side) => {
+    function getAllValidMovesForSide(side) {
         let validMoves = [],
             i,j,gridObj = grid2Obj();
         for (i=0;i<8;i++) {
@@ -380,11 +379,12 @@ $(function () {
             }
         }
         return validMoves;
-    };
+    }
 
-    const showMoveAnnotation = ({prefix,column,row,captured,castled}) => {
+    function showMoveAnnotation({prefix,column,row,captured,castled}) {
         const currentPlayer = Board.getPlayer();
         let isCheck = '';
+        let notationString = '';
         column = String.fromCharCode(("a".codePointAt() + (column-1)));
         if (!getAllValidMovesForSide(currentPlayer).length) {
             isCheck = '#';
@@ -433,23 +433,20 @@ $(function () {
                 }
                 break;
         }
-        textnotation.innerHTML = notationString;
-        textnotation.scrollTop = textnotation.scrollHeight;
-    };
-    let flipsButton = document.getElementById('toggleFlips');
-    flipsButton.addEventListener('click', () => {
+        $('#textnotation').html(notationString);
+        $('#textnotation').scrollTop = $('#textnotation').scrollHeight;
+    })
+    $('#toggleFlips').click(function(){
         Board.canFlip = !Board.canFlip;
         if(Board.canFlip){
-            flipsButton.textContent = 'Board Flips: Enabled';
-        }
-        else{
-            flipsButton.textContent = 'Board Flips: Disabled';
+            $(this).html('Board Flips: Enabled');
+        } else {
+            $(this).html('Board Flips: Disabled');
         }
     });
-    document.getElementById('copyButton').addEventListener('click', () => {
-        navigator.clipboard.writeText(document.getElementById('textnotation').textContent);
-        alert("Copied the text: " + copyText.value);
-    });
+    $('#copybutton').click(function(){
+        navigator.clipboard.writeText($('#textnotation').textContent);
+    })
     
     $(".grid td").draggable({
         helper: function () {
