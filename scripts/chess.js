@@ -567,6 +567,7 @@ $(function () {
 
           $(".grid .piece." + Board.getPlayer()).draggable( "enable" );
           showMoveAnnotation(annotation);
+          Board.turnCount++;
         },
         over: function () {
             $(this).css("border-color", "red");
