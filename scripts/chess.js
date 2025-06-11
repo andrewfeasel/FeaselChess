@@ -22,7 +22,7 @@ $(function () {
             if(this.turnCount % 2 === 0){
                 return "White";
             } else {
-                return "Black"
+                return "Black";
             }
         }
     };
