@@ -1,31 +1,36 @@
 $(function () {
-    const Board = {
-        canFlip: false,
-        flipped: false,
-        turnCount: 0,
-        flip() {
-            if (this.canFlip) {
-                const board = $("table")[0];
-                let pieceArr = Array.from($('table td'));
-                if (!this.flipped) {
-                    board.style.rotate = '180deg';
-                    pieceArr.forEach(piece => piece.style.rotate = '180deg');
-                    this.flipped = true;
-                } else {
-                    board.style.rotate = '0deg';
-                    pieceArr.forEach(piece => piece.style.rotate = '0deg');
-                    this.flipped = false;
-                }
-            }
-        },
-        getPlayer(){
-            if(this.turnCount % 2 === 0){
-                return "White";
-            } else {
-                return "Black";
-            }
+    class Chess {
+      static InitialBoardState = $('table')[0].html();
+      constructor(){
+        $('table')[0].html(Chess.InitialBoardState);
+        this.canFlip = false;
+        this.flipped = false;
+        this.turnCount = 0;
+      },
+      flip() {
+        if (this.canFlip) {
+          const board = $("table")[0];
+          let pieceArr = Array.from($('table td'));
+          if (!this.flipped) {
+            board.style.rotate = '180deg';
+            pieceArr.forEach(piece => piece.style.rotate = '180deg');
+            this.flipped = true;
+          } else {
+            board.style.rotate = '0deg';
+            pieceArr.forEach(piece => piece.style.rotate = '0deg');
+            this.flipped = false;
+          }
         }
+      }
+      getPlayer(){
+        if(this.turnCount % 2 === 0){
+          return "White";
+        } else {
+          return "Black";
+        }
+      }
     };
+    const Board = new Chess();
     $("#alertMessage").html("White's Move");
     function getGridPosition(obj) {
         const column = $(obj).parent().children().index(obj);
