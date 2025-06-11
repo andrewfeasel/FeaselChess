@@ -150,7 +150,7 @@ $(function () {
         }
 
         return false;
-    };
+    }
 
     function getValidMovesForPiece(gridObj, piece, position,ignoreCheck) {
         var moves = [],validMoves = [],
@@ -435,7 +435,7 @@ $(function () {
         }
         $('#textnotation').html(notationString);
         $('#textnotation').scrollTop = $('#textnotation').scrollHeight;
-    })
+    }
     $('#toggleFlips').click(function(){
         Board.canFlip = !Board.canFlip;
         if(Board.canFlip){
@@ -444,7 +444,7 @@ $(function () {
             $(this).html('Board Flips: Disabled');
         }
     });
-    $('#copybutton').click(function(){
+    $('#copyButton').click(function(){
         navigator.clipboard.writeText($('#textnotation').textContent);
     })
     
