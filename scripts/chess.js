@@ -1,16 +1,17 @@
 $(function () {
     class Chess {
-      static InitialBoardState = $('table')[0].html();
+      static InitialBoardState = $('#game').html();
       constructor(){
-        $('table')[0].html(Chess.InitialBoardState);
+        $('#game').html(Chess.InitialBoardState);
+        $("#alertMessage").text("White's Move");
         this.canFlip = false;
         this.flipped = false;
         this.turnCount = 0;
-      },
+      }
       flip() {
         if (this.canFlip) {
-          const board = $("table")[0];
-          let pieceArr = Array.from($('table td'));
+          const board = $("#game");
+          let pieceArr = Array.from($('#game td'));
           if (!this.flipped) {
             board.style.rotate = '180deg';
             pieceArr.forEach(piece => piece.style.rotate = '180deg');
@@ -30,8 +31,23 @@ $(function () {
         }
       }
     };
-    const Board = new Chess();
-    $("#alertMessage").html("White's Move");
+
+    let Board = new Chess();
+    $('#newGame').click(function(){
+      Board = new Chess();
+    });
+    $('#toggleFlips').click(function(){
+        Board.canFlip = !Board.canFlip;
+        if(Board.canFlip){
+            $(this).html('Board Flips: Enabled');
+        } else {
+            $(this).html('Board Flips: Disabled');
+        }
+    });
+    $('#copyButton').click(function(){
+        navigator.clipboard.writeText($('#textnotation').text());
+    });
+
     function getGridPosition(obj) {
         const column = $(obj).parent().children().index(obj);
         const row = $(obj).parent().parent().children().index(obj.parentNode);
@@ -107,7 +123,7 @@ $(function () {
         }
         return annotation;
     }
-    const grid2Obj = () => {
+    function grid2Obj() {
         let i=1,j=1,
             gridObj = [];
         for (i=1;i<=8;i++) {
@@ -117,9 +133,9 @@ $(function () {
             }
         }
         return gridObj;
-    };
+    }
 
-    const isKingInCheck = (side,gridObj) => {
+    function isKingInCheck(side,gridObj) {
         let validMoves = [],
             i,j,k,kingPos={};
 
@@ -435,21 +451,9 @@ $(function () {
                 }
                 break;
         }
-        $('#textnotation').html(notationString);
+        $('#textnotation').html($('#textnotation').html() + notationString);
         $('#textnotation').scrollTop = $('#textnotation').scrollHeight;
     }
-    $('#toggleFlips').click(function(){
-        Board. = !Board.canFlip;
-        if(Board.canFlip){
-            $(this).html('Board Flips: Enabled');
-        } else {
-            $(this).html('Board Flips: Disabled');
-        }
-    });
-    $('#copyButton').click(function(){
-        navigator.clipboard.writeText($('#textnotation').textContent);
-    })
-    
     $(".grid td").draggable({
         helper: function () {
             let helper = $("<i>").insertAfter(".grid");
@@ -460,8 +464,8 @@ $(function () {
         containment: ".grid",
         start: function () {
             let pos = getGridPosition(this);
-            let piece = getPieceAtPosition(pos.column,pos.row),
-            let validMoves = getValidMovesForPiece(grid2Obj(), piece, pos),
+            let piece = getPieceAtPosition(pos.column,pos.row);
+            let validMoves = getValidMovesForPiece(grid2Obj(), piece, pos);
             $(this).draggable("option", "revert", true);
             $(this).css("border-color", "yellow");
             for (let i in validMoves) {
@@ -543,6 +547,7 @@ $(function () {
             $(this).attr("class", ui.draggable.attr("class"));
             if (!$(this).hasClass("hasMoved")) {
                 $(this).addClass("hasMoved");
+                Board.turnCount++;
             }
             $(this).css("border-color", "");
             $(this).draggable( "enable" );
@@ -568,7 +573,6 @@ $(function () {
 
           $(".grid .piece." + Board.getPlayer()).draggable( "enable" );
           showMoveAnnotation(annotation);
-          Board.turnCount++;
         },
         over: function () {
             $(this).css("border-color", "red");
