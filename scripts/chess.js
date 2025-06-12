@@ -6,6 +6,7 @@ $(function () {
         $("#alertMessage").text("White's Move");
         this.canFlip = false;
         this.flipped = false;
+        this.currentPlayer = "White";
         this.turnCount = 0;
       }
       flip() {
@@ -23,11 +24,11 @@ $(function () {
           }
         }
       }
-      getPlayer(){
-        if(this.turnCount % 2 === 0){
-          return "White";
+      changePlayers() {
+        if(this.currentPlayer === "White") {
+            this.currentPlayer = "Black";
         } else {
-          return "Black";
+            this.currentPlayer = "White";
         }
       }
     };
@@ -403,7 +404,7 @@ $(function () {
     }
 
     function showMoveAnnotation({prefix,column,row,captured,castled}) {
-        const currentPlayer = Board.getPlayer();
+        const currentPlayer = Board.currentPlayer;
         let isCheck = '';
         let notationString = '';
         column = String.fromCharCode(("a".codePointAt() + (column-1)));
@@ -413,10 +414,13 @@ $(function () {
         else if (isKingInCheck(currentPlayer, grid2Obj())) {
             isCheck = '+';
         }
+        if(currentPlayer === 'Black'){
+            Board.turnCount++;
+        }
         switch (castled) {
             case 'O-O-O':
                 if (currentPlayer === 'Black') {
-                    notationString += `${Board.turnCount}. ${castled}${isCheck} `; 
+                    notationString += `${Board.turnCount}. ${castled}${isCheck} `;
                 }
                 else {
                     notationString += `${castled}${isCheck} `;
@@ -424,7 +428,7 @@ $(function () {
                 break;
             case 'O-O':
                 if (currentPlayer === 'Black') {
-                    notationString += `${Board.turnCount}. ${castled}${isCheck} `; 
+                    notationString += `${Board.turnCount}. ${castled}${isCheck} `;
                 }
                 else {
                     notationString += `${castled}${isCheck} <br>`;
@@ -451,7 +455,7 @@ $(function () {
                 }
                 break;
         }
-        $('#textnotation').html($('#textnotation').html() + notationString);
+        $('#textnotation').append(notationString);
         $('#textnotation').scrollTop = $('#textnotation').scrollHeight;
     }
     $(".grid td").draggable({
@@ -480,11 +484,10 @@ $(function () {
         },
         disabled: true
     });
-
-    $(".grid .piece." + Board.getPlayer()).draggable( "enable" );
+    
+    $(".grid .piece." + Board.currentPlayer).draggable( "enable" );
     $(".grid td").droppable({
         drop: function (event, ui) {
-            Board.flip();
             let newPosition = getGridPosition(this);
             let oldPosition = getGridPosition(ui.draggable[0]);
 
@@ -547,31 +550,29 @@ $(function () {
             $(this).attr("class", ui.draggable.attr("class"));
             if (!$(this).hasClass("hasMoved")) {
                 $(this).addClass("hasMoved");
-                Board.turnCount++;
             }
             $(this).css("border-color", "");
             $(this).draggable( "enable" );
 
             ui.draggable.attr("class", "");
-            ui.draggable.draggable("option", "revert", false);
-            
-            $(".grid .piece." + Board.getPlayer()).draggable( "disable" );
-
-            if (!getAllValidMovesForSide(Board.getPlayer()).length) {
-                if (isKingInCheck(Board.getPlayer(), grid2Obj())) {
-                    $('#alertMessage').html(`Checkmate! ${Board.getPlayer()} Loses!`);
+            ui.draggable.draggable("option", "revert", false);            
+            $(".grid .piece." + Board.currentPlayer).draggable( "disable" );
+            Board.changePlayers();
+            Board.flip();
+            if (!getAllValidMovesForSide(Board.currentPlayer).length) {
+                if (isKingInCheck(Board.currentPlayer, grid2Obj())) {
+                    $('#alertMessage').text(`Checkmate! ${Board.currentPlayer} Loses!`);
                 } else {
-                  $('#alertMessage').html('Stalemate!');
+                  $('#alertMessage').text('Stalemate!');
                 }
-           } else {
-             if (isKingInCheck(Board.getPlayer(), grid2Obj())) {
-              $('#alertMessage').html(`Check! ${Board.getPlayer()}'s Move`);
             } else {
-              $('#alertMessage').html(`${Board.getPlayer()}'s Move`);
+              if (isKingInCheck(Board.currentPlayer, grid2Obj())) {
+                $('#alertMessage').text(`Check! ${Board.currentPlayer}'s Move`);
+              } else {
+                $('#alertMessage').text(`${Board.currentPlayer}'s Move`);
+              }
             }
-          }
-
-          $(".grid .piece." + Board.getPlayer()).draggable( "enable" );
+          $(".grid .piece." + Board.currentPlayer).draggable( "enable" );
           showMoveAnnotation(annotation);
         },
         over: function () {
