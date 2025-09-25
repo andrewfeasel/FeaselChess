@@ -6,122 +6,123 @@ function getGridPosition(obj) {
 function getSquare(column, row) {
   return $(".grid tr:nth-child("+(row)+") td:nth-child("+(column)+")");
 };
-    function getPieceAtPosition(column, row, gridObj) {
-        let obj = {},
-            retObj = {hasMoved: false},
-            i=0,classes;
-
-        if (typeof(gridObj) === "undefined") {
-            obj = getSquare(column, row, gridObj);
-
-            if (obj.attr("class")) {
-                classes = obj.attr("class").split(' ');
-            }
-
-            if (obj.hasClass("piece")) {
-                retObj.side = (obj.hasClass("White") ? "White" : "Black");
-                for (i in classes) {
-                    if ($.inArray(classes[i], ["rook","knight","bishop","queen","king","pawn"]) != -1)  {
-                        retObj.type = classes[i];
-                    }
-                    if (classes[i] === "hasMoved") {
-                        retObj.hasMoved = true;
-                    }
-                }
-            }
-
-            if (obj.hasClass("potentialEnPassant")) {
-                retObj.potentialEnPassant = true;
-            }
-        } else {
-            retObj = gridObj[row-1][column-1];
-        }
-        return retObj;
+function getPieceAtPosition(column, row, gridObj) {
+  let obj = {};
+  let retObj = { hasMoved: false };
+  let i = 0; 
+  let classes;
+  if (typeof(gridObj) === "undefined") {
+    obj = getSquare(column, row, gridObj);
+    if (obj.attr("class")) {
+      classes = obj.attr("class").split(' ');
     }
-    function calculateAnnotation(newPosition, oldPosition) {
-        let grid = grid2Obj();
-        let pieceBeingMoved = getPieceAtPosition(oldPosition.column, oldPosition.row, grid);
-        let pieceAtNewPosition = getPieceAtPosition(newPosition.column, newPosition.row, grid);
-        let annotation = {};
-        annotation.column = newPosition.column;
-        annotation.row = (9-newPosition.row);
-        annotation.captured = typeof pieceAtNewPosition.side !== "undefined";
-        switch (pieceBeingMoved.type) {
-            case "pawn":
-                if(!!annotation.captured){
-                    annotation.prefix = String.fromCharCode(("a".codePointAt() + (oldPosition.column-1)));
-                }
-                else {
-                    annotation.prefix = '';
-                }
-                break;
-            case "knight":
-                annotation.prefix = "N";
-                break;
-            case "king":
-                annotation.prefix = "K";
-                break;
-            case "bishop":
-                annotation.prefix = "B";
-                break;
-            case "rook":
-                annotation.prefix = "R";
-                break;
-            case "queen":
-                annotation.prefix = "Q";
-                break;
+    if (obj.hasClass("piece")) {
+      retObj.side = (obj.hasClass("White") ? "White" : "Black");
+      for (i in classes) {
+        if ($.inArray(classes[i], ["rook","knight","bishop","queen","king","pawn"]) != -1)  {
+          retObj.type = classes[i];
         }
-        return annotation;
+        if (classes[i] === "hasMoved") {
+          retObj.hasMoved = true;
+        }
+      }
     }
-    function grid2Obj() {
-        let i=1,j=1,
-            gridObj = [];
-        for (i=1;i<=8;i++) {
-            gridObj.push([]);
-            for (j=1;j<=8;j++) {
-                gridObj[i-1].push(getPieceAtPosition(j,i));
-            }
-        }
-        return gridObj;
+    if (obj.hasClass("potentialEnPassant")) {
+      retObj.potentialEnPassant = true;
     }
+  } else {
+    retObj = gridObj[row-1][column-1];
+  }
+  return retObj;
+}
+function calculateAnnotation(newPosition, oldPosition) {
+  let grid = grid2Obj();
+  let pieceBeingMoved = getPieceAtPosition(oldPosition.column, oldPosition.row, grid);
+  let pieceAtNewPosition = getPieceAtPosition(newPosition.column, newPosition.row, grid);
+  
+  let annotation = {};
+  annotation.column = newPosition.column;
+  annotation.row = (9 - newPosition.row);
+  annotation.captured = typeof pieceAtNewPosition.side !== "undefined";
+  
+  switch (pieceBeingMoved.type) {
+    case "pawn":
+      if(!!annotation.captured){
+        annotation.prefix = String.fromCharCode(("a".codePointAt() + (oldPosition.column-1)));
+      } else {
+        annotation.prefix = '';
+      }
+      break;
+    case "knight":
+      annotation.prefix = "N";
+      break;
+    case "king":
+      annotation.prefix = "K";
+      break;
+    case "bishop":
+      annotation.prefix = "B";
+      break;
+    case "rook":
+      annotation.prefix = "R";
+      break;
+    case "queen":
+      annotation.prefix = "Q";
+      break;
+  }
+  return annotation;
+}
+function grid2Obj() {
+  let gridObj = [];
+  for (let i = 1; i <= 8; i++) {
+    gridObj.push([]);
+    for (let j = 1; j <= 8; j++) {
+      gridObj[i - 1].push(getPieceAtPosition(j ,i));
+    }
+  }
+  return gridObj;
+}
 
-    function isKingInCheck(side,gridObj) {
-        let validMoves = [],
-            i,j,k,kingPos={};
-
-        // first, find the king we're interested in...
-        for (i=0;i<8;i++) {
-            for (j=0;j<8;j++) {
-                if (gridObj[i][j].hasOwnProperty("side") &&
-                    gridObj[i][j].side === side &&
-                    gridObj[i][j].type === "king") {
-                    // king found at row i column j
-                    kingPos = {row: i+1, column: j+1};
-                    break;
-                }
-            }
-            if (kingPos.hasOwnProperty("row")) {
-                break;
-            }
-        }
+function isKingInCheck(side,gridObj) {
+  let validMoves = [];
+  let kingPos = {};
+  // first, find the king we're interested in...
+  for (let i = 0; i <8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (
+        gridObj[i][j].hasOwnProperty("side") &&
+        gridObj[i][j].side === side &&
+        gridObj[i][j].type === "king"
+      ) {
+        // king found at row i column j
+        kingPos = {row: i+1, column: j+1};
+        break;
+      }
+    }
+    if (kingPos.hasOwnProperty("row")) {
+      break;
+    }
+  }
         // then, see if any of our opponents can validly occupy our king's space
-        for (i=0;i<8;i++) {
-            for (j=0;j<8;j++) {
-                if (gridObj[i][j].hasOwnProperty("side") &&
-                    gridObj[i][j].side !== side) {
-                    validMoves = getValidMovesForPiece(gridObj, gridObj[i][j], {row: i+1, column: j+1}, true);
-                    for (k=0;k<validMoves.length;k++) {
-                        if (validMoves[k].column === kingPos.column &&
-                            validMoves[k].row === kingPos.row) {
-                            return true;
-                        }
-                    }
-                }
-            }
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (
+        gridObj[i][j].hasOwnProperty("side") &&
+        gridObj[i][j].side !== side
+      ) {
+        validMoves = getValidMovesForPiece(gridObj, gridObj[i][j], {row: i+1, column: j+1}, true);
+        for (let k = 0; k < validMoves.length; k++) {
+          if (validMoves[k].column === kingPos.column &&
+              validMoves[k].row === kingPos.row
+          ) {
+            return true;
+          }
         }
-
-        return false;
+      }
     }
+  }
+
+  return false;
+}
 
 function getValidMovesForPiece(gridObj, piece, position,ignoreCheck) {
   var moves = [],validMoves = [],
